@@ -63,6 +63,26 @@ CONFIG_MAPPING = {
         "option": "gearman_server",
         "type": "string",
     },
+    "password_minimum_length": {
+        "section": "Dashboard",
+        "option": "password_minimum_length",
+        "type": "int",
+    },
+    "password_common_validation": {
+        "section": "Dashboard",
+        "option": "password_common_validation",
+        "type": "boolean",
+    },
+    "password_user_attribute_similarity_validation": {
+        "section": "Dashboard",
+        "option": "password_user_attribute_similarity_validation",
+        "type": "boolean",
+    },
+    "password_complexity_validation": {
+        "section": "Dashboard",
+        "option": "password_complexity_validation",
+        "type": "boolean",
+    },
     "shibboleth_authentication": {
         "section": "Dashboard",
         "option": "shibboleth_authentication",
@@ -140,6 +160,10 @@ elasticsearch_server = 127.0.0.1:9200
 elasticsearch_timeout = 10
 search_enabled = true
 gearman_server = 127.0.0.1:4730
+password_minimum_length = 8
+password_common_validation = True
+password_user_attribute_similarity_validation = True
+password_complexity_validation = True
 shibboleth_authentication = False
 cas_authentication = False
 ldap_authentication = False
@@ -344,6 +368,34 @@ MIDDLEWARE = [
 
 AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
 
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {"min_length": config.get("password_minimum_length")},
+    }
+]
+
+PASSWORD_COMMON_VALIDATION = config.get("password_common_validation")
+if PASSWORD_COMMON_VALIDATION:
+    AUTH_PASSWORD_VALIDATORS += [
+        {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"}
+    ]
+
+PASSWORD_USER_ATTRIBUTE_SIMILARITY_VALIDATION = config.get(
+    "password_user_attribute_similarity_validation"
+)
+if PASSWORD_USER_ATTRIBUTE_SIMILARITY_VALIDATION:
+    AUTH_PASSWORD_VALIDATORS += [
+        {
+            "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+        }
+    ]
+
+PASSWORD_COMPLEXITY_VALIDATION = config.get("password_complexity_validation")
+if PASSWORD_COMPLEXITY_VALIDATION:
+    AUTH_PASSWORD_VALIDATORS += [
+        {"NAME": "components.accounts.validators.PasswordComplexityValidator"}
+    ]
 
 ROOT_URLCONF = "urls"
 
