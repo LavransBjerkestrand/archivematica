@@ -21,6 +21,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 from main.models import UserProfile
 
@@ -30,8 +32,10 @@ class UserCreationForm(UserCreationForm):
 
     def clean_password1(self):
         data = self.cleaned_data["password1"]
-        if data != "" and len(data) < 8:
-            raise forms.ValidationError("Password should be at least 8 characters long")
+        try:
+            _ = validate_password(data)
+        except ValidationError as err:
+            raise forms.ValidationError(err)
         return data
 
     def save(self, commit=True):
@@ -89,11 +93,10 @@ class UserChangeForm(UserChangeForm):
 
     def clean_password(self):
         data = self.cleaned_data["password"]
-        if (
-            self.cleaned_data["password"] != ""
-            and len(self.cleaned_data["password"]) < 8
-        ):
-            raise forms.ValidationError("Password should be at least 8 characters long")
+        try:
+            _ = validate_password(data)
+        except ValidationError as err:
+            raise forms.ValidationError(err)
         return data
 
     def clean(self):
