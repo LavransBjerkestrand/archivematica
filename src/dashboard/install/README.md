@@ -162,6 +162,30 @@ variables or in the gunicorn configuration file.
     - **Type:** `string`
     - **Default:** `127.0.0.1:4730`
 
+- **`ARCHIVEMATICA_DASHBOARD_DASHBOARD_PASSWORD_MINIMUM_LENGTH`**:
+    - **Description:** sets minimum length for user passwords.
+    - **Config file example:** `Dashboard.password_minimum_length`
+    - **Type:** `integer`
+    - **Default:** `8`
+
+- **`ARCHIVEMATICA_DASHBOARD_DASHBOARD_PASSWORD_COMMON_VALIDATION`**:
+    - **Description:** enables password validation that prevents users from using passwords that occur in a list of common passwords.
+    - **Config file example:** `Dashboard.password_common_validation`
+    - **Type:** `boolean`
+    - **Default:** `true`
+
+- **`ARCHIVEMATICA_DASHBOARD_DASHBOARD_PASSWORD_USER_ATTRIBUTE_SIMILARITY_VALIDATION`**:
+    - **Description:** enables password validation that prevents users from using passwords that are too similar to their username and other user attributes.
+    - **Config file example:** `Dashboard.password_user_attribute_similarity_validation`
+    - **Type:** `boolean`
+    - **Default:** `true`
+
+- **`ARCHIVEMATICA_DASHBOARD_DASHBOARD_PASSWORD_COMPLEXITY_VALIDATION`**:
+    - **Description:** enables password validation that checks that passwords contain at least three of: lower-case characters, upper-case characters, numbers, special characters.
+    - **Config file example:** `Dashboard.password_complexity_validation`
+    - **Type:** `boolean`
+    - **Default:** `true`
+
 - **`ARCHIVEMATICA_DASHBOARD_DASHBOARD_SHIBBOLETH_AUTHENTICATION`**:
     - **Description:** enables the Shibboleth authentication system.
     - **Config file example:** `Dashboard.shibboleth_authentication`
