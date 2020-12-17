@@ -21,7 +21,10 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import UserChangeForm
-from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.password_validation import (
+    password_validators_help_text_html,
+    validate_password,
+)
 from django.core.exceptions import ValidationError
 
 from main.models import UserProfile
@@ -29,14 +32,6 @@ from main.models import UserProfile
 
 class UserCreationForm(UserCreationForm):
     is_superuser = forms.BooleanField(label="Administrator", required=False)
-
-    def clean_password1(self):
-        data = self.cleaned_data["password1"]
-        try:
-            _ = validate_password(data)
-        except ValidationError as err:
-            raise forms.ValidationError(err)
-        return data
 
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
@@ -58,7 +53,11 @@ class UserCreationForm(UserCreationForm):
 
 class UserChangeForm(UserChangeForm):
     email = forms.EmailField(required=True)
-    password = forms.CharField(widget=forms.PasswordInput, required=False)
+    password = forms.CharField(
+        widget=forms.PasswordInput,
+        required=False,
+        help_text=password_validators_help_text_html(),
+    )
     password_confirmation = forms.CharField(widget=forms.PasswordInput, required=False)
     is_superuser = forms.BooleanField(label="Administrator", required=False)
     regenerate_api_key = forms.CharField(
